@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nextjs-client-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: hostpath
+  hostPath:
+    path:  "/run/desktop/mnt/host/c/projects/distributed-file-storage/nextjs-client"

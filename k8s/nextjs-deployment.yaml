@@ -14,17 +14,15 @@ spec:
     spec:
       containers:
         - name: nextjs
-          image: nextjs-dev:latest
+          image: tusharkansal/nextjs-dev:latest
           ports:
            - containerPort: 3000
           volumeMounts:
             - name: nextjs-source
               mountPath: /app
-            - name: node-modules
-              mountPath: /app/node_modules
       volumes:
         - name: nextjs-source
-          hostPath:
-            path: ../client
-        - name: node-modules
-          emptyDir: {}
+          #hostPath:
+            #path: "/run/desktop/mnt/host/c/projects/distributed-file-storage/nextjs-client"
+          persistentVolumeClaim:
+            claimName: nextjs-client-pvc
