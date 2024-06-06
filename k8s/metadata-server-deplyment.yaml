@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metadata-server-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metadata-server
+  template:
+    metadata:
+      labels:
+        app: metadata-server
+    spec:
+      containers:
+      - name: metadata-server
+        image: distributed-file-storage-metadata-server:latest
+        ports:
+        - containerPort: 3002
