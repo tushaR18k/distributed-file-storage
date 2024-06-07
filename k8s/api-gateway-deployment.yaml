@@ -15,6 +15,12 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: distributed-file-storage-api-gateway:latest
+          image: tusharkansal/api-gateway:latest
           ports:
-            - containerPort: 3001
+            - containerPort: 8000
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+      volumes:
+        - name: uploads
+          emptyDir: {}
