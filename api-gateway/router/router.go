@@ -1,7 +1,7 @@
 package router
 
 import (
-	"api-gateway/handlers"
+	"api-gateway/routes"
 
 	"github.com/gorilla/mux"
 )
@@ -9,9 +9,9 @@ import (
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/upload", handlers.UploadFile).Methods("POST")
-	r.HandleFunc("/api/download/{filename}", handlers.DownloadFile).Methods("GET")
-	r.HandleFunc("/api/files", handlers.ListFiles).Methods("GET")
+	r.HandleFunc("/api/upload", routes.UploadFile).Methods("POST")
+	r.HandleFunc("/api/download/{filename}", routes.DownloadFile).Methods("GET")
+	r.HandleFunc("/api/files", routes.ListFiles).Methods("GET")
 
 	return r
 }

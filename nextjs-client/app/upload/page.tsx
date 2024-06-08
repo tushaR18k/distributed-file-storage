@@ -1,9 +1,61 @@
 // app/pages/upload.tsx
-
+"use client";
 import Head from 'next/head'
-import Link from 'next/link'
+import {useState} from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Upload() {
+
+  const [selectedFiles, setSelectedFiles] = useState<FileList| null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState('');
+  const router = useRouter();
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSelectedFiles(event.target.files);
+  };
+
+  const hanndleUpload = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if(!selectedFiles || selectedFiles.length === 0){
+      setMessage("Please select atleast one file to upload!");
+      return;
+    }
+
+    setUploading(true);
+    setMessage('');
+
+    const formData = new FormData();
+    Array.from(selectedFiles).forEach(file => {
+      formData.append('file',file);
+    });
+
+    try{
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`,{
+        method: 'POST',
+        body: formData,
+      });
+
+      if(response.ok){
+        setMessage("Files uploaded Successfully!");
+        router.push('/files');
+      }else{
+        const errorData = await response.json();
+        setMessage(`Error: ${errorData.message}`);
+        
+      }
+    }catch(error){
+      console.log(error);
+      setMessage('An error occurred while uploading the files.');
+    }finally{
+      setUploading(false);
+      setSelectedFiles(null);
+    }
+  }
+
+
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
@@ -16,12 +68,21 @@ export default function Upload() {
         <h1 className="text-6xl font-bold">Upload Files</h1>
         <p className="mt-3 text-2xl">Use the form below to upload your files.</p>
 
-        <form className="mt-6 flex w-full max-w-4xl flex-col items-center justify-around sm:w-full">
-          <input type="file" multiple className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
-          <Link href="/files" className="mt-6 w-32 rounded-xl bg-blue-600 p-2 text-white hover:bg-blue-700">
-              Upload
-          </Link>
+        <form className="mt-6 flex w-full max-w-4xl flex-col items-center justify-around sm:w-full" onSubmit={hanndleUpload}>
+          <input type="file" multiple  onChange = {handleFileChange} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
+          <button
+            type="submit"
+            disabled={uploading}
+            className={`mt-6 w-32 rounded-xl p-2 text-white ${uploading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+          >
+            {uploading ? 'Uploading...':'Upload'}
+          </button>
         </form>
+
+        {message && (
+          <p className='mt-4 text-xl text-red-500'>{message}</p>
+        )}
+
       </main>
 
       <footer className="flex h-24 w-full items-center justify-center border-t">
