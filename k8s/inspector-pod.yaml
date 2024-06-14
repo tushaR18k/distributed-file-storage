@@ -4,10 +4,10 @@ metadata:
   name: pvc-inspector
 spec:
   containers:
-  - image: busybox
+  - image: node
     name: pvc-inspector
-    command: ["tail"]
-    args: ["-f", "/dev/null"]
+    command: ["sh" ,"-c" , "cd /pvc && npm install -D @swc/cli @swc/core && sleep infinity"]
+    #args: ["-f", "/dev/null"]
     volumeMounts:
     - mountPath: /pvc
       name: pvc-mount
