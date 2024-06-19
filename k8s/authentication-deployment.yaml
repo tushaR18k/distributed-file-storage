@@ -19,7 +19,7 @@ spec:
             - containerPort: 7000
           env:
             - name: POSTGRES_HOST
-              value: Insert Value # postgres service name will come here
+              value: postgres-service
             - name: POSTGRESS_PASSWORD
               valueFrom:
                 secretKeyRef:
