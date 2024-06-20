@@ -3,9 +3,8 @@ kind: Service
 metadata:
   name: nextjs-service
 spec:
-  type: LoadBalancer
   ports:
-  - port: 80
+  - port: 3000
     targetPort: 3000
   selector:
     app: nextjs

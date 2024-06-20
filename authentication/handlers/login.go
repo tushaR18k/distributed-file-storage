@@ -41,5 +41,6 @@ func (s *App) LoginHandler(w http.ResponseWriter, r *http.Request) error {
 		Expires: time.Now().Add(24 * time.Hour),
 	})
 
-	return utils.WriteJSON(w, http.StatusOK, map[string]string{"message": "Login Successful!"})
+	return utils.WriteJSON(w, http.StatusOK, map[string]string{"message": "Login Successful!",
+		"token": tokenString})
 }

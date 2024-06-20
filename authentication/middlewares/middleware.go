@@ -2,10 +2,10 @@ package middlewares
 
 import (
 	"authentication/utils"
+	"context"
+	"fmt"
 	"net/http"
 	"strings"
-
-	"github.com/dgrijalva/jwt-go"
 )
 
 func JWTMiddleware(next http.Handler) http.Handler {
@@ -21,17 +21,19 @@ func JWTMiddleware(next http.Handler) http.Handler {
 			http.Error(w, "Authorization header format invalid", http.StatusUnauthorized)
 			return
 		}
-
-		token, err := utils.ParseToken(parts[1])
+		claims, err := utils.ParseToken(parts[1])
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
+		fmt.Println(claims)
 
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			r.Header.Set("UserID", claims["user_id"].(string))
-			next.ServeHTTP(w, r)
+		if claims != nil {
+			userId := claims.UserId
+			ctx := context.WithValue(r.Context(), "userID", userId)
+			next.ServeHTTP(w, r.WithContext(ctx))
 		} else {
+			fmt.Println("HEYYy!3")
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 		}
 	})

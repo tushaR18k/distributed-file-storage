@@ -3,17 +3,25 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
 import { fetchFiles, File } from '../lib/api';
+import { AuthWrapper } from '../components/AuthWrapper';
+import Cookies from 'js-cookie';
 
 
 
 export default function Files() {
   const [files, setFiles]  = useState<File[]>([]);
+  const router = useRouter();
+  const token = Cookies.get("token");
 
   useEffect(()=>{
     async function getFiles(){
       try{
-        const filesData = await fetchFiles();
+        const filesData = await fetchFiles(token);
+        if (filesData[0].name === "Unauthorized"){
+            router.push("/login")
+        }
         setFiles(filesData);
       }catch(error){
         console.log('Error fetching files: ', error);
@@ -23,7 +31,8 @@ export default function Files() {
   },[]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <AuthWrapper>
+        <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
         <title>Manage Files</title>
         <meta name="description" content="View and manage your uploaded files" />
@@ -61,5 +70,6 @@ export default function Files() {
         </Link>
       </footer>
     </div>
+    </AuthWrapper>
   )
 }

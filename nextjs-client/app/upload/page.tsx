@@ -3,6 +3,8 @@
 import Head from 'next/head'
 import {useState} from 'react';
 import { useRouter } from 'next/navigation';
+import { AuthWrapper } from '../components/AuthWrapper';
+import Cookies from 'js-cookie';
 
 export default function Upload() {
 
@@ -25,6 +27,7 @@ export default function Upload() {
 
     setUploading(true);
     setMessage('');
+    const token = Cookies.get("token");
 
     const formData = new FormData();
     Array.from(selectedFiles).forEach(file => {
@@ -34,12 +37,16 @@ export default function Upload() {
     try{
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`,{
         method: 'POST',
+        headers:{
+          'Authorization':`Bearer ${token}`
+        },
         body: formData,
       });
-
       if(response.ok){
         setMessage("Files uploaded Successfully!");
         router.push('/files');
+      }else if(response.status === 401){
+        router.push("/login")
       }else{
         const errorData = await response.json();
         setMessage(`Error: ${errorData.message}`);
@@ -57,7 +64,8 @@ export default function Upload() {
 
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <AuthWrapper>
+      <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
         <title>Upload Files</title>
         <meta name="description" content="Upload your files to the distributed storage system" />
@@ -97,5 +105,7 @@ export default function Upload() {
         </a>
       </footer>
     </div>
+    </AuthWrapper>
+    
   )
 }

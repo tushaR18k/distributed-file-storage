@@ -4,14 +4,14 @@ metadata:
   name: pvc-inspector
 spec:
   containers:
-  - image: node
+  - image: arunvelsriram/utils
     name: pvc-inspector
-    command: ["sh" ,"-c" , "cd /pvc && npm install -D @swc/cli @swc/core && sleep infinity"]
+    command: ["sh" ,"-c" , "sleep infinity"]
     #args: ["-f", "/dev/null"]
-    volumeMounts:
-    - mountPath: /pvc
-      name: pvc-mount
-  volumes:
-  - name: pvc-mount
-    persistentVolumeClaim:
-      claimName: nextjs-client-pvc
+  #   volumeMounts:
+  #   - mountPath: /pvc
+  #     name: pvc-mount
+  # volumes:
+  # - name: pvc-mount
+  #   persistentVolumeClaim:
+  #     claimName: nextjs-client-pvc

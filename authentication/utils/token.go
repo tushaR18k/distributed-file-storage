@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -32,7 +33,7 @@ func GenerateToken(userId uint) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-func ParseToken(tokenString string) (*jwt.Token, error) {
+func ParseToken(tokenString string) (*Claims, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		log.Fatal("Environment variable JWT_SECRET is not set")
@@ -43,7 +44,18 @@ func ParseToken(tokenString string) (*jwt.Token, error) {
 		return jwtKey, nil
 	})
 
-	return token, err
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			return nil, errors.New("invalid token signature")
+		}
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, errors.New("invalid token")
+	}
+
+	return claims, err
 }
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
