@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -41,5 +42,12 @@ func UploadFile(w http.ResponseWriter, r *http.Request) {
 
 	// Respond with success message
 	fmt.Fprintf(w, "File uploaded successfully: %s", handler.Filename)
+
+	log.Print("Encoding the names into JSON")
+
+	log.Print("Sending back the response")
+	w.WriteHeader(http.StatusOK)
+	// Set the content-type header
+	w.Header().Set("Content-Type", "application/json")
 
 }

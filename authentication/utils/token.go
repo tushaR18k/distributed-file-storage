@@ -63,3 +63,8 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	w.WriteHeader(status)
 	return json.NewEncoder(w).Encode(v)
 }
+
+func WriteJSONResponse(w http.ResponseWriter, status int, v any) any {
+	w.Header().Add("Content-Type", "application/json")
+	return v
+}

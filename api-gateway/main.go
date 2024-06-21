@@ -11,6 +11,7 @@ import (
 
 func main() {
 	r := router.NewRouter()
+	port := ":8000"
 
 	corsHandler := handlers.CORS(
 		handlers.AllowedOrigins([]string{"http://localhost:3000"}),
@@ -18,8 +19,8 @@ func main() {
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
 	)(r)
 
-	fmt.Println("Server is running on http:localhost:8000")
-	if err := http.ListenAndServe(":8000", corsHandler); err != nil {
+	fmt.Printf("Server is running on http:localhost%s", port)
+	if err := http.ListenAndServe(port, corsHandler); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
