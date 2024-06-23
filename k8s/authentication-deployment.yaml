@@ -18,6 +18,10 @@ spec:
           ports:
             - containerPort: 7000
           env:
+            - name: API_HOST
+              value: api-gateway-service
+            - name: API_PORT
+              value: "8000"
             - name: POSTGRES_HOST
               value: postgres-service
             - name: POSTGRESS_PASSWORD

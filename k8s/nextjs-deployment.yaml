@@ -20,6 +20,11 @@ spec:
           volumeMounts:
             - name: nextjs-source
               mountPath: /app
+          env:
+            - name: NEXT_PUBLIC_AUTH_API_HOST
+              value: localhost #authentication-service (not working when giving the service name as host, getting name not resolved error!)
+            - name: NEXT_PUBLIC_AUTH_API_PORT
+              value: "7000"
       volumes:
         - name: nextjs-source
           hostPath:

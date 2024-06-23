@@ -4,7 +4,7 @@ export interface File{
 }
 
 export async function fetchFiles(token: any): Promise<File[]>{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/files`,{
+    const res = await fetch(`http://${process.env.NEXT_PUBLIC_AUTH_API_HOST}:${process.env.NEXT_PUBLIC_AUTH_API_PORT}/api/files`,{
         method: 'GET',
         headers:{
             'Authorization': `Bearer ${token}`

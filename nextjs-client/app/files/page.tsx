@@ -47,7 +47,7 @@ export default function Files() {
           <ul className="mt-6 w-full max-w-4xl list-disc text-left sm:w-full">
             {files.map((file:File,index:number)=> (
               <li key={index} className='mt-2 text-xl'>
-                <Link href={`${process.env.NEXT_PUBLIC_API_URL}/api/download/${file.name}`}
+                <Link href={`http://${process.env.NEXT_PUBLIC_AUTH_API_HOST}:${process.env.NEXT_PUBLIC_AUTH_API_PORT}/api/download/${file.name}`}
                 className='text-blue-500 hover:underline'>
                   {file.name}
                 </Link>

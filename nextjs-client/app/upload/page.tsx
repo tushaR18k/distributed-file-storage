@@ -35,7 +35,7 @@ export default function Upload() {
     });
 
     try{
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`,{
+      const response = await fetch(`http://${process.env.NEXT_PUBLIC_AUTH_API_HOST}:${process.env.NEXT_PUBLIC_AUTH_API_PORT}/api/upload`,{
         method: 'POST',
         headers:{
           'Authorization':`Bearer ${token}`

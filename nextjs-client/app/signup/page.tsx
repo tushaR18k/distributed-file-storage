@@ -14,8 +14,9 @@ export default function Signup (){
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault()
+        console.log("Making call to backend!")
         try{
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`,{
+            const res = await fetch(`http://${process.env.NEXT_PUBLIC_AUTH_API_HOST}:${process.env.NEXT_PUBLIC_AUTH_API_PORT}/signup`,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
